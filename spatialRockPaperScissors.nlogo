@@ -7,8 +7,9 @@ breed [rocks rock]
 breed [papers paper]
 breed [scissors scissor]
 
+; numTurtles is a slider
+
 to setup
-  let numTurtles 20
   clear-all
   set-default-shape turtles "square"
   create-rocks numTurtles
@@ -171,6 +172,21 @@ PENS
 "default" 1.0 0 -13345367 true "" "plot count rocks"
 "pen-1" 1.0 0 -1184463 true "" "plot count papers"
 "pen-2" 1.0 0 -2674135 true "" "plot count scissors"
+
+SLIDER
+27
+209
+199
+242
+numTurtles
+numTurtles
+0
+1000
+389.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
