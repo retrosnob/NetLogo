@@ -1,91 +1,42 @@
-turtles-own [state function next-state]
+; potential parameters to evolve
+; speed range color (e.g. particular colors less likely to be detected, etc)
+;
+
+
+breed [rocks rock]
+breed [papers paper]
+breed [scissors scissor]
 
 to setup
   clear-all
-  set-default-shape turtles "circle"
-  create-turtles num-nodes
-  layout-circle sort turtles 15
-
-  ask patches [
-    set pcolor blue
+  set-default-shape turtles "square"
+  create-As
+  ask turtles [
+   setxy random-xcor random-ycor
+    set color yellow
   ]
 
-  ask turtles [
-    set state one-of [true false] ; Pick a starting state
-    set label-color green
-    set function random (2 ^ (2 ^ indegree)) ; Pick a random boolean function of appropriate length
-    set label function
-    ifelse state [set color white] [set color black]
 
-    ; Pick one of the other turtles and create a link from it
-    let otherTurtles sort other turtles
-    let differentTurtle one-of otherTurtles
-    create-link-from differentTurtle
+end
 
-    ; Keep getting links from other turtles until all nodes have the correct indegree
-    repeat indegree - 1 [
-      set otherTurtles remove differentTurtle otherTurtles ; Remove the turtle from the list of other turtles so we don't get duplicate links
-      set differentTurtle one-of otherTurtles
-      create-link-from differentTurtle
+to go
+  if one-of [true false] [rt random 10 lt random 10]
+  fd 0.1
+  let other-turtles other turtles-here
+  if any? other-turtles [
+    set color red
+    ask any one of other-turtles [
+     set color red
     ]
   ]
-
-  reset-ticks
 end
 
-to update
-  ; We can't update the state of each node until all nodes have decided what their next states will be.
-  ; This is how you get turtles to do things in two waves. All get their next state then all update it.
-  ask turtles [ get-next-state ]
-  ask turtles [ update-next-state]
-  print-state
-  tick
-end
-
-to print-state
-  let string ""
-  foreach sort turtles [
-    [the-turtle] ->
-    ifelse [state] of the-turtle = true
-    [set string word string "o"]
-    [set string word string " "]
-  ]
-  print string
-end
-
-to get-next-state
-  ; Get all nodes that have a link to this node in order of their who number.
-  let neighbours sort in-link-neighbors
-  let powerOf2 1
-  let total 0
-  ; Interpret the states of incoming nodes as a binary number used to reference the binary function and
-  ; get the next state.
-  foreach neighbours [
-    [the-turtle] ->
-    let s [state] of the-turtle
-    if s [set total total + powerOf2]
-    set powerOf2 powerOf2 * 2
-  ]
-  ifelse nthBitOfNumber total function = 1 [set next-state true][set next-state false]
-end
-
-to update-next-state
-  set state next-state
-  ifelse state [set color white] [set color black]
-end
-
-to-report nthBitOfNumber [n number]
-  repeat n [
-    set number floor (number / 2)
-  ]
-  report number mod 2
-end
 @#$#@#$#@
 GRAPHICS-WINDOW
-227
-25
-664
-463
+210
+10
+647
+448
 -1
 -1
 13.0
@@ -95,39 +46,24 @@ GRAPHICS-WINDOW
 1
 1
 0
-0
-0
+1
+1
 1
 -16
 16
 -16
 16
-1
-1
+0
+0
 1
 ticks
 30.0
 
-SLIDER
-18
-230
-190
-263
-num-nodes
-num-nodes
-0
-100
-16.0
-1
-1
-NIL
-HORIZONTAL
-
 BUTTON
-27
-51
-100
-84
+38
+41
+111
+74
 NIL
 setup
 NIL
@@ -141,43 +77,33 @@ NIL
 1
 
 BUTTON
-28
-110
-111
-143
+43
+91
+106
+124
 NIL
-update
+go
 NIL
 1
 T
-OBSERVER
+TURTLE
 NIL
 NIL
 NIL
 NIL
-1
-
-CHOOSER
-20
-285
-158
-330
-indegree
-indegree
-1 2 3 4
 1
 
 BUTTON
-28
-167
-111
-200
+42
+136
+105
+169
 NIL
-update
+go
 T
 1
 T
-OBSERVER
+TURTLE
 NIL
 NIL
 NIL
