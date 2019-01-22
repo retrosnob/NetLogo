@@ -63,12 +63,12 @@ to go
   tick
 end
 
-to iWin [me otherTurtle]
+to iLose [me otherTurtle]
   set breed [breed] of otherTurtle
   set color [color] of otherTurtle
 end
 
-to iLose [me otherTurtle]
+to iWin [me otherTurtle]
   ask otherTurtle [
     set breed [breed] of me
     set color [color] of me
